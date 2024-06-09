@@ -7,7 +7,6 @@ import (
   log "github.com/mingi3442/go-grpc/log"
 )
 
-// 이벤트 데이터를 JSON으로 변환
 func ParseJson(event coretypes.ResultEvent) (string, error) {
 
   jsonData, err := json.MarshalIndent(event, "", "  ")

@@ -3,15 +3,20 @@ package main
 import (
   "context"
   "fmt"
+
   log "github.com/mingi3442/go-grpc/log"
 
   ws "github.com/mingi3442/tendermint-ws/client"
-  utils "github.com/mingi3442/tendermint-ws/utils"
+  "github.com/mingi3442/tendermint-ws/event"
+
   "time"
 )
 
 func main() {
   rpcUrl := "https://cosmos-rpc.polkachu.com"
+  subscriber := "relayer"
+  query := "tm.event='Tx'"
+  // query := "tm.event='Tx' AND (message.action='send_packet' OR message.action='recv_packet' OR message.action='acknowledge_packet' OR message.action='timeout_packet')"
 
   wsClient, err := ws.Connect(rpcUrl)
   if err != nil {
@@ -21,27 +26,19 @@ func main() {
 
   defer wsClient.DisConnect()
 
-  // query := "tm.event='Tx' AND (message.action='send_packet' OR message.action='recv_packet' OR message.action='acknowledge_packet' OR message.action='timeout_packet')"
-  query := "tm.event='Tx'"
   ctx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
   defer cancel()
 
-  subscriber := "relayer"
-  events, err := wsClient.RpcClient.Subscribe(ctx, subscriber, query)
+  events, err := wsClient.Subscribe(ctx, subscriber, query)
   if err != nil {
     msg := fmt.Sprintf("Failed to subscribe to events: %v", err)
     log.Log(log.ERROR, msg)
   }
 
-  fmt.Println("Subscribed to IBC events...")
+  go event.HandleEvents(ctx, events)
 
-  for {
-    select {
-    case event := <-events:
-      utils.ParseJson(event)
-    case <-ctx.Done():
-      fmt.Println("Subscription timed out")
-      return
-    }
+  select {
+  case <-ctx.Done():
+    fmt.Println("Main loop timed out")
   }
 }
