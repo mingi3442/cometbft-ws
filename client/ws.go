@@ -1,13 +1,14 @@
 package client
 
 import (
-  "log"
+  "fmt"
 
   rpchttp "github.com/cometbft/cometbft/rpc/client/http"
+  "github.com/mingi3442/go-grpc/log"
 )
 
 type WsClient struct {
-  conn *rpchttp.HTTP
+  RpcClient *rpchttp.HTTP
 }
 
 func Connect(url string) (*WsClient, error) {
@@ -18,17 +19,18 @@ func Connect(url string) (*WsClient, error) {
   }
 
   if err := rpcWsClient.Start(); err != nil {
-    log.Fatalf("Failed to start RPC client: %v", err)
+    msg := fmt.Sprintf("Failed to start RPC client: %v", err)
+    log.Log(log.ERROR, msg)
     return nil, err
   }
   return &WsClient{
-    conn: rpcWsClient,
+    RpcClient: rpcWsClient,
   }, nil
 }
 
 func (c *WsClient) DisConnect() error {
-  if c.conn != nil {
-    return c.conn.Stop()
+  if c.RpcClient != nil {
+    return c.RpcClient.Stop()
   }
   return nil
 }

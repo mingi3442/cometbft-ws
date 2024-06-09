@@ -3,9 +3,8 @@ package utils
 import (
   "encoding/json"
   "fmt"
-  "log"
-
   coretypes "github.com/cometbft/cometbft/rpc/core/types"
+  log "github.com/mingi3442/go-grpc/log"
 )
 
 // 이벤트 데이터를 JSON으로 변환
@@ -13,7 +12,8 @@ func ParseJson(event coretypes.ResultEvent) (string, error) {
 
   jsonData, err := json.MarshalIndent(event, "", "  ")
   if err != nil {
-    log.Printf("Failed to marshal event to JSON: %v", err)
+    msg := fmt.Sprintf("Failed to marshal event to JSON: %v", err)
+    log.Log(log.ERROR, msg)
     return "", err
   }
 

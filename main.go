@@ -3,34 +3,34 @@ package main
 import (
   "context"
   "fmt"
-  "log"
+  log "github.com/mingi3442/go-grpc/log"
 
-  rpchttp "github.com/cometbft/cometbft/rpc/client/http"
-  utils "github.com/mingi3442/tendermint-ws/utils/event_handler"
+  ws "github.com/mingi3442/tendermint-ws/client"
+  utils "github.com/mingi3442/tendermint-ws/utils"
   "time"
 )
 
 func main() {
-  url := "https://cosmos-rpc.polkachu.com"
-  rpcClient, err := rpchttp.New(url, "/websocket")
+  rpcUrl := "https://cosmos-rpc.polkachu.com"
+
+  wsClient, err := ws.Connect(rpcUrl)
   if err != nil {
-    log.Fatalf("Failed to create RPC client: %v", err)
+    msg := fmt.Sprintf("Failed to connect to RPC server: %v", err)
+    log.Log(log.ERROR, msg)
   }
 
-  if err := rpcClient.Start(); err != nil {
-    log.Fatalf("Failed to start RPC client: %v", err)
-  }
-  defer rpcClient.Stop()
+  defer wsClient.DisConnect()
 
   // query := "tm.event='Tx' AND (message.action='send_packet' OR message.action='recv_packet' OR message.action='acknowledge_packet' OR message.action='timeout_packet')"
   query := "tm.event='Tx'"
   ctx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
   defer cancel()
 
-  subscriber := "my-relayer"
-  events, err := rpcClient.Subscribe(ctx, subscriber, query)
+  subscriber := "relayer"
+  events, err := wsClient.RpcClient.Subscribe(ctx, subscriber, query)
   if err != nil {
-    log.Fatalf("Failed to subscribe to events: %v", err)
+    msg := fmt.Sprintf("Failed to subscribe to events: %v", err)
+    log.Log(log.ERROR, msg)
   }
 
   fmt.Println("Subscribed to IBC events...")
