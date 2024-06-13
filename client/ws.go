@@ -25,6 +25,7 @@ func Connect(url string) (*WsClient, error) {
     log.Log(log.ERROR, msg)
     return nil, err
   }
+  log.Log(log.INFO, "RPC client started")
   return &WsClient{
     RpcClient: rpcWsClient,
   }, nil
@@ -34,6 +35,7 @@ func (c *WsClient) DisConnect() error {
   if c.RpcClient != nil {
     return c.RpcClient.Stop()
   }
+  log.Log(log.INFO, "RPC client stopped")
   return nil
 }
 
@@ -43,6 +45,7 @@ func (c *WsClient) Subscribe(ctx context.Context, subscriber, query string) (<-c
     return nil, err
   }
 
-  fmt.Println("Subscribed to events with query:", query)
+  msg := fmt.Sprintf("Subscribed to events with query: %s", query)
+  log.Log(log.INFO, msg)
   return events, nil
 }

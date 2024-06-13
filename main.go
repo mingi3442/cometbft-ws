@@ -15,8 +15,8 @@ import (
 func main() {
   rpcUrl := "https://cosmos-rpc.polkachu.com"
   subscriber := "relayer"
-  query := "tm.event='Tx'"
-  // query := "tm.event='Tx' AND (message.action='send_packet' OR message.action='recv_packet' OR message.action='acknowledge_packet' OR message.action='timeout_packet')"
+  // query := "tm.event='Tx'"
+  query := "tm.event='Tx' AND (message.module='ibc_channel' OR message.module='ibc_transfer' OR message.module='ibc_client' OR EXISTS(ibc_channel.*) OR EXISTS(ibc_transfer.*) OR EXISTS(ibc_client.*) OR EXISTS(send_packet.*) OR EXISTS(recv_packet.*) OR EXISTS(acknowledge_packet.*) OR EXISTS(timeout_packet.*))"
 
   wsClient, err := ws.Connect(rpcUrl)
   if err != nil {
@@ -26,7 +26,7 @@ func main() {
 
   defer wsClient.DisConnect()
 
-  ctx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
+  ctx, cancel := context.WithTimeout(context.Background(), time.Minute*100)
   defer cancel()
 
   events, err := wsClient.Subscribe(ctx, subscriber, query)
@@ -37,8 +37,6 @@ func main() {
 
   go event.HandleEvents(ctx, events)
 
-  select {
-  case <-ctx.Done():
-    fmt.Println("Main loop timed out")
-  }
+  <-ctx.Done()
+  log.Log(log.WARN, "Main loop timed out")
 }
