@@ -15,8 +15,8 @@ import (
 func main() {
   rpcUrl := "https://cosmos-rpc.polkachu.com"
   subscriber := "relayer"
-  // query := "tm.event='Tx'"
-  query := "tm.event='Tx' AND (message.module='ibc_channel' OR message.module='ibc_transfer' OR message.module='ibc_client' OR EXISTS(ibc_channel.*) OR EXISTS(ibc_transfer.*) OR EXISTS(ibc_client.*) OR EXISTS(send_packet.*) OR EXISTS(recv_packet.*) OR EXISTS(acknowledge_packet.*) OR EXISTS(timeout_packet.*))"
+  query := "tm.event='Tx'"
+  // query := "tm.event='Tx' AND (message.module='ibc_channel' OR message.module='ibc_transfer' OR message.module='ibc_client' OR EXISTS(ibc_channel.*) OR EXISTS(ibc_transfer.*) OR EXISTS(ibc_client.*) OR EXISTS(send_packet.*) OR EXISTS(recv_packet.*) OR EXISTS(acknowledge_packet.*) OR EXISTS(timeout_packet.*))"
 
   wsClient, err := ws.Connect(rpcUrl)
   if err != nil {
