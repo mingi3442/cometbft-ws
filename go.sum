@@ -302,8 +302,8 @@ github.com/mattn/go-isatty v0.0.19/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
-github.com/mingi3442/go-grpc v0.0.0-20240331094304-e514053f4d38 h1:ygiDwykTrQkbCzGoZ9GB6fPlqzpylnQAKK59p8s83Lc=
-github.com/mingi3442/go-grpc v0.0.0-20240331094304-e514053f4d38/go.mod h1:fPVMCAsR/AGfzJBJjK815h+8WnWEutL/nmsjn9Or/sI=
+github.com/mingi3442/go-grpc v0.0.0-20240616093355-34a15949b647 h1:4VxUDLmGpeb/M1rvdhm9yQW5wbZiMTQZQCx0XjIr7BI=
+github.com/mingi3442/go-grpc v0.0.0-20240616093355-34a15949b647/go.mod h1:fPVMCAsR/AGfzJBJjK815h+8WnWEutL/nmsjn9Or/sI=
 github.com/minio/highwayhash v1.0.2 h1:Aak5U0nElisjDCfPSG79Tgzkn2gl66NxOMspRrKnA/g=
 github.com/minio/highwayhash v1.0.2/go.mod h1:BQskDq+xkJ12lmlUUi7U0M5Swg3EWR+dLTk+kldvVxY=
 github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=

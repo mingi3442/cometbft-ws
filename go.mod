@@ -6,11 +6,9 @@ require (
 	github.com/cometbft/cometbft v0.38.7
 	github.com/cosmos/cosmos-sdk v0.50.7
 	github.com/cosmos/gogoproto v1.4.12
-	github.com/mingi3442/go-grpc v0.0.0-20240331094304-e514053f4d38
+	github.com/mingi3442/go-grpc v0.0.0-20240616093355-34a15949b647
 
 )
-
-replace github.com/cosmos/cosmos-sdk/store => cosmossdk.io/store v1.1.0
 
 require (
 	cosmossdk.io/api v0.7.5 // indirect

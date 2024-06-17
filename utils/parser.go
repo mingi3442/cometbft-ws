@@ -14,7 +14,7 @@ func ParseJson(event coretypes.ResultEvent) (string, error) {
   actions, found := event.Events["message.action"]
 
   if !found {
-    log.Log(log.WARN, "No message.action.")
+    log.Warn("No message.action.")
     return "", nil
   }
 
@@ -22,14 +22,12 @@ func ParseJson(event coretypes.ResultEvent) (string, error) {
 
   fmt.Printf("Type of event.Data: %s\n", reflect.TypeOf(event.Data))
   for _, action := range actions {
-    msg := fmt.Sprintf(" - %s", action)
-    log.Log(log.DEBUG, msg)
+    log.Debug(" - %s", action)
   }
 
   jsonData, err := json.MarshalIndent(event.Data, "", "  ")
   if err != nil {
-    msg := fmt.Sprintf("Failed to marshal event to JSON: %v", err)
-    log.Log(log.ERROR, msg)
+    log.Error("Failed to marshal event to JSON: %v", err)
     return "", err
   }
 

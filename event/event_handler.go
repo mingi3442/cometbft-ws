@@ -3,7 +3,7 @@ package event
 import (
   "context"
   // "encoding/base64"
-  "fmt"
+
   types "github.com/cometbft/cometbft/types"
   // "reflect"
 
@@ -16,8 +16,7 @@ func HandleEvents(ctx context.Context, txCh <-chan coretypes.ResultEvent) {
   for {
     select {
     case event := <-txCh:
-      log.Log(log.INFO, "Received event")
-
+      log.Info("Received event")
       // fmt.Printf("Event Data Type: %s\n", reflect.TypeOf(event.Data))
       // fmt.Printf("Event Data: %+v\n", event.Data)
 
@@ -28,25 +27,29 @@ func HandleEvents(ctx context.Context, txCh <-chan coretypes.ResultEvent) {
       //   log.Log(log.DEBUG, s)
       // }
 
-      // 이벤트 데이터가 types.EventDataTx 타입인지 확인하고 처리
       if txEvent, ok := event.Data.(types.EventDataTx); ok {
-        log.Log(log.DEBUG, "Received EventDataTx data")
+        log.Debug("Received EventDataTx data")
 
         // 트랜잭션 데이터를 디코딩
         decodedTx, err := utils.DecodeTxData(txEvent.Tx)
         if err != nil {
-          msg := fmt.Sprintf("Failed to decode transaction data: %v", err)
-          log.Log(log.ERROR, msg)
+          log.Error("Failed to decode transaction data: %v", err)
         } else {
-          msg := fmt.Sprintf("\n---Decoded Transaction---\n%s\n", decodedTx)
-          log.Log(log.INFO, msg)
+          log.Info("\n---Decoded Transaction---\n%s\n", decodedTx)
+        }
+
+        err = utils.SaveTransactionToFile(txEvent, "./transactions")
+        if err != nil {
+          log.Error("Failed to save transaction to file: %v", err)
+        } else {
+          log.Info("Transaction saved to file successfully")
         }
       } else {
-        log.Log(log.WARN, "Unknown event data type")
+        log.Warn("Unknown event data type")
       }
 
     case <-ctx.Done():
-      log.Log(log.DEBUG, "Event processing stopped due to timeout or cancellation")
+      log.Debug("Event processing stopped due to timeout or cancellation")
       return
     }
   }

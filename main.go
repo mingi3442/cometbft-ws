@@ -2,7 +2,6 @@ package main
 
 import (
   "context"
-  "fmt"
 
   log "github.com/mingi3442/go-grpc/log"
 
@@ -20,8 +19,7 @@ func main() {
 
   wsClient, err := ws.Connect(rpcUrl)
   if err != nil {
-    msg := fmt.Sprintf("Failed to connect to RPC server: %v", err)
-    log.Log(log.ERROR, msg)
+    log.Error("Failed to connect to RPC server: %v", err)
   }
 
   defer wsClient.DisConnect()
@@ -31,12 +29,11 @@ func main() {
 
   events, err := wsClient.Subscribe(ctx, subscriber, query)
   if err != nil {
-    msg := fmt.Sprintf("Failed to subscribe to events: %v", err)
-    log.Log(log.ERROR, msg)
+    log.Error("Failed to subscribe to events: %v", err)
   }
 
   go event.HandleEvents(ctx, events)
 
   <-ctx.Done()
-  log.Log(log.WARN, "Main loop timed out")
+  log.Warn("Main loop timed out")
 }

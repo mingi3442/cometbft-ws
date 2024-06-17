@@ -2,7 +2,7 @@ package client
 
 import (
   "context"
-  "fmt"
+
 
   rpchttp "github.com/cometbft/cometbft/rpc/client/http"
   coretypes "github.com/cometbft/cometbft/rpc/core/types"
@@ -21,11 +21,10 @@ func Connect(url string) (*WsClient, error) {
   }
 
   if err := rpcWsClient.Start(); err != nil {
-    msg := fmt.Sprintf("Failed to start RPC client: %v", err)
-    log.Log(log.ERROR, msg)
+    log.Error("Failed to start RPC client: %v", err)
     return nil, err
   }
-  log.Log(log.INFO, "RPC client started")
+  log.Info("RPC client started")
   return &WsClient{
     RpcClient: rpcWsClient,
   }, nil
@@ -35,7 +34,7 @@ func (c *WsClient) DisConnect() error {
   if c.RpcClient != nil {
     return c.RpcClient.Stop()
   }
-  log.Log(log.INFO, "RPC client stopped")
+  log.Info("RPC client stopped")
   return nil
 }
 
@@ -45,7 +44,6 @@ func (c *WsClient) Subscribe(ctx context.Context, subscriber, query string) (<-c
     return nil, err
   }
 
-  msg := fmt.Sprintf("Subscribed to events with query: %s", query)
-  log.Log(log.INFO, msg)
+  log.Info("Subscribed to events with query: %s", query)
   return events, nil
 }
